@@ -1,3 +1,5 @@
+import * as controls from "./controls.js";
+
 export class Router {
   routes = {};
   // Mapeamento de rotas utilizando classes
@@ -8,7 +10,34 @@ export class Router {
   route(event) {
     event = event || window.event;
     event.preventDefault();
-    window.history.pushState({}, "", event.target.href);
+
+    let bgClass;
+
+    if (document.body.classList.contains("bgHome")) {
+      bgClass = "bgHome";
+    } else if (document.body.classList.contains("bgUniverse")) {
+      bgClass = "bgUniverse";
+    } else if (document.body.classList.contains("bgExploration")) {
+      bgClass = "bgExploration";
+    }
+
+    window.history.pushState({ wallpaper: bgClass }, "", event.target.href);
+    window.addEventListener("popstate", function (event) {
+      console.log(event.state.wallpaper)
+    });
+    switch (event.target.pathname) {
+      case "/":
+        controls.bgHome();
+        break;
+      case "/universe":
+        controls.bgUniverse();
+        break;
+      case "/exploration":
+        controls.bgExploration();
+        break;
+      default:
+        break;
+    }
 
     this.handle();
   }
